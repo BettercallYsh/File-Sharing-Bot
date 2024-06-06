@@ -5,15 +5,13 @@
 
 import pymongo, os
 from config import DB_URI, DB_NAME
-
-
-
-
 from motor.motor_asyncio import AsyncIOMotorClient
-from config import MONGO_URI
 
-client = AsyncIOMotorClient(DB_URI)
-db = client['telegram_bot']
+
+dbclient = AsyncIOMotorClient(DB_URI)
+database = dbclient[DB_NAME]
+
+user_data = database['users']
 
 async def add_user(user_id):
     await db.users.update_one({"id": user_id}, {"$set": {"id": user_id}}, upsert=True)
