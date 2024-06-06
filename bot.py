@@ -10,7 +10,7 @@ import sys
 from datetime import datetime
 
 from config import API_HASH, APP_ID, LOGGER, TG_BOT_TOKEN, TG_BOT_WORKERS, FORCE_SUB_CHANNEL, CHANNEL_ID, PORT
-from database.database import get_forcesub
+from database.database import get_forcesub, add_admin, remove_admin 
 
 class Bot(Client):
     def __init__(self):
