@@ -13,7 +13,7 @@ from pyrogram.errors import FloodWait, UserIsBlocked, InputUserDeactivated
 from bot import Bot
 from config import ADMINS, FORCE_MSG, START_MSG, CUSTOM_CAPTION, DISABLE_CHANNEL_BUTTON, PROTECT_CONTENT
 from helper_func import subscribed, encode, decode, get_messages
-from database.database import add_user, del_user, full_userbase, present_user
+from database.database import add_user, del_user, full_userbase, present_user, add_admin, remove_admin, update_forcesub
 
 
 
@@ -151,6 +151,40 @@ async def not_joined(client: Client, message: Message):
         quote = True,
         disable_web_page_preview = True
     )
+
+@Bot.on_message(filters.command('setforcesub') & filters.private & filters.user(ADMINS))
+async def set_force_sub(client: Bot, message: Message):
+    try:
+        new_channel = message.text.split()[1]
+        await update_forcesub(new_channel)
+        client.force_sub_channel = new_channel
+        await message.reply(f"Force subscribe channel has been updated to {new_channel}.")
+    except IndexError:
+        await message.reply("Please provide a channel username or ID.")
+    except Exception as e:
+        await message.reply(f"Failed to update force subscribe channel: {e}")
+
+@Bot.on_message(filters.command('addadmin') & filters.private & filters.user(ADMINS))
+async def add_admin_command(client: Bot, message: Message):
+    try:
+        new_admin_id = int(message.text.split()[1])
+        await add_admin(new_admin_id)
+        await message.reply(f"Admin {new_admin_id} added successfully.")
+    except IndexError:
+        await message.reply("Please provide a user ID.")
+    except Exception as e:
+        await message.reply(f"Failed to add admin: {e}")
+
+@Bot.on_message(filters.command('removeadmin') & filters.private & filters.user(ADMINS))
+async def remove_admin_command(client: Bot, message: Message):
+    try:
+        admin_id = int(message.text.split()[1])
+        await remove_admin(admin_id)
+        await message.reply(f"Admin {admin_id} removed successfully.")
+    except IndexError:
+        await message.reply("Please provide a user ID.")
+    except Exception as e:
+        await message.reply(f"Failed to remove admin: {e}")
 
 @Bot.on_message(filters.command('users') & filters.private & filters.user(ADMINS))
 async def get_users(client: Bot, message: Message):
