@@ -60,6 +60,26 @@ async def get_messages(client, message_ids):
         messages.extend(msgs)
     return messages
 
+# Function to add admin
+async def add_admin(admin_id):
+    # Your logic to add admin
+    # For example, you could add the admin ID to a list of admins in the database
+    await add_admin(admin_id)
+
+
+# Function to remove admin
+async def remove_admin(admin_id):
+    # Your logic to remove admin
+    # For example, you could remove the admin ID from the list of admins in the database
+    await remove_admin(admin_id)
+
+
+# Function to update force subscribe channel
+async def update_forcesub(new_channel):
+    # Your logic to update the force subscribe channel
+    # For example, you could update the force subscribe channel ID in the database
+    await update_forcesub(new_channel)
+
 async def get_message_id(client, message):
     if message.forward_from_chat:
         if message.forward_from_chat.id == client.db_channel.id:
